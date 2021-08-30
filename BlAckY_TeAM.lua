@@ -1,6 +1,7 @@
 --[[
 
 --]]
+database = dofile("./File_Libs/redis.lua").connect("127.0.0.1", 6379)
 serpent = dofile("./File_Libs/serpent.lua")
 JSON    = dofile("./File_Libs/dkjson.lua")
 json    = dofile("./File_Libs/JSON.lua")
@@ -8486,6 +8487,12 @@ send(msg.chat_id_, msg.id_, "⌔︙تم التحديث")
 end
 
 if text == 'السورس' or text == 'سورس' or text == 'ياسورس' or text == 'يا سورس' then  
+local url,res = https.request('https://black-source.tk/BlackTeAM/ChatMember.php?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.info ~= true then
+send(msg.chat_id_,msg.id_,'⌔︙شترك في قناة السورس اولآ @fBBBBB .')   
+return false 
+end
 Text = [[
 *- Black Team .*
  — — — — — — — — — 
@@ -9597,8 +9604,8 @@ if text == "تحديث السورس ⌔" then
 send(msg.chat_id_,msg.id_,'⌔︙تم التحديث')
 os.execute('rm -rf BlAckY_TeAM.lua')
 os.execute('rm -rf start.lua')
-os.execute('wget https://raw.githubusercontent.com/BlAckY-TeAM/BlAckY_TeAM/master/BlAckY_TeAM.lua')
-os.execute('wget https://raw.githubusercontent.com/BlAckY-TeAM/BlAckY_TeAM/master/start.lua')
+os.execute('wget https://raw.githubusercontent.com/BlAckY_TeAM/BlAckY_TeAM/master/BlAckY_TeAM.lua')
+os.execute('wget https://raw.githubusercontent.com/BlAckY_TeAM/BlAckY_TeAM/master/start.lua')
 dofile('BlAckY_TeAM.lua')  
 return false
 end

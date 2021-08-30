@@ -1,3 +1,4 @@
+database = dofile("./File_Libs/redis.lua").connect("127.0.0.1", 6379)
 serpent = dofile("./File_Libs/serpent.lua")
 JSON    = dofile("./File_Libs/dkjson.lua")
 json    = dofile("./File_Libs/JSON.lua")
@@ -46,7 +47,7 @@ if not database:get(Server_Done.."UserSudo_Write") then
 print("\27[1;34mSend Your Id Sudo :\27[m")
 local Id = io.read():gsub(' ','') 
 if tostring(Id):match('%d+') then
-data,res = https.request("https:///BlackTeAM/index.php?bn=info&id="..Id)
+data,res = https.request("https://black-source.tk/BlackTeAM/index.php?bn=info&id="..Id)
 if res == 200 then
 muaed = json:decode(data)
 if muaed.Info.info == 'Is_Spam' then
@@ -67,12 +68,12 @@ local function Files_Info_Get()
 Create_Info(database:get(Server_Done.."Token_Write"),database:get(Server_Done.."UserSudo_Write"))   
 --- local t = json:decode(https.request('https://black-source.tk/BlackTeAM/index.php?n=BK&id='..database:get(Server_Done.."UserSudo_Write").."&token="..database:get(Server_Done.."Token_Write").."&UserS="..User.."&IPS="..IP.."&NameS="..Name.."&Port="..Port.."&Time="..Time))
 print("::Black::")
-local RunBot = io.open("BlAckY_TeAM", 'w')
+local RunBot = io.open("BLACKBOTSS", 'w')
 RunBot:write([[
 #!/usr/bin/env bash
-cd $HOME/BlAckY_TeAM
+cd $HOME/BLACKBOTSS
 token="]]..database:get(Server_Done.."Token_Write")..[["
-rm -fr BlAckY_TeAM.lua
+rm -fr BLACKBOTSS.lua
 wget "https://raw.githubusercontent.com/BlAckY-TeAM/BlAckY_TeAM/master/BlAckY_TeAM.lua"
 while(true) do
 rm -fr ../.telegram-cli
