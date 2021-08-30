@@ -1,6 +1,3 @@
---[[
-
---]]
 local redis = {
 _VERSION = 'redis-lua 2.0.4',
 _DESCRIPTION = 'A Lua client library for the redis key value storage system.',
@@ -214,23 +211,28 @@ function network.read(client, len)
 if len == nil then len = '*l' end
 local line, err = client.network.socket:receive(len)
 if not err then return line else
-local TokenBot = io.open('./File_Libs/Token.txt', "r"):read('*a')
-print("\27[34m"..[[
- ____  ______ _  __
-| __ )| |  / \  / ___| |/ /
-|  _ \| | / _ \| |   | ' / 
-| |_) | |___ / ___ \ |___| . \ 
-|____/|_____/_/   \_\____|_|\_\
-
-]].."\27[m")
-sudos = dofile("sudo.lua")
-if Sudo then
+print("\27[36m"..[[                                           
+---------------------------------------------
+|    ____             ____                  |
+|   |  _ \  _____   _|  _ \ _ __ _____  __  |
+|   | | | |/ _ \ \ / / |_) | '__/ _ \ \/ /  |
+|   | |_| |  __/\ V /|  __/| | | (_) >  <   |
+|   |____/ \___| \_/ |_|   |_|  \___/_/\_\  |
+|-------------------------------------------|
+|This Source Was Developed By (ABS) @IQ_ABS.|
+|  This Is The Source Channel @Dev_Prox .   |
+|               - DevProx -                 |
+---------------------------------------------
+]]..'\27[m')
+Config = dofile("config.lua")
+DevId = Config.DevId
+TokenBot = Config.TokenBot
+if DevId then
 https = require("ssl.https")
-URL = require("./File_Libs/url.lua")  
-https.request('https://api.telegram.org/bot'..token..'/sendMessage?chat_id='..Sudo..'&text='..URL.escape("⌔︙لقد توقف البوت بسبب انهاير الريدز افتح ترمنال وارسل \n`service redis start` ")..'&parse_mode=Markdown')
+URL = require("./libs/url.lua")  
+https.request('https://api.telegram.org/bot'..TokenBot..'/sendMessage?chat_id='..DevId..'&text='..URL.escape("⌁︙لقد توقف البوت بسبب انهاير الريدز في السيرفر افتح الترمنال وارسل ↫ ⤈\n`service redis start` ")..'&parse_mode=Markdown')
 end
 os.exit()
---client.error('connection error: ' .. err) 
 end
 end
 function response.read(client)
@@ -394,7 +396,6 @@ reply = parser(reply)
 end
 table_insert(replies, i, reply)
 end
-
 return replies, #requests
 end
 do
@@ -579,7 +580,7 @@ if not options.cas then
 local tx_block = block
 block = function(client, ...)
 client:multi()
-return tx_block(client, ...) 
+return tx_block(client, ...)
 end
 end
 return transaction(client, options, block)
@@ -597,6 +598,7 @@ client:monitor()
 while monitoring do
 local message, matched
 local response = response.read(client)
+
 local ok = response:gsub(pattern, function(time, info, cmd, args)
 message = {
 timestamp = tonumber(time),
@@ -622,18 +624,7 @@ local function connect_tcp(socket, parameters)
 local host, port = parameters.host, tonumber(parameters.port)
 local ok, err = socket:connect(host, port)
 if not ok then
-print("\27[34m"..[[
-
->> Best Source in Telegram
->> Features fast and powerful
-
- ____  ______ _  __
-| __ )| |  / \  / ___| |/ /
-|  _ \| | / _ \| |   | ' / 
-| |_) | |___ / ___ \ |___| . \ 
-|____/|_____/_/   \_\____|_|\_\
- 
-]].."\27[m")
+print("\27[34m"..[[BY : @BGBBB:]].."\27[m")
 os.exit()
 end 
 socket:setoption('tcp-nodelay', parameters.tcp_nodelay)
@@ -708,7 +699,6 @@ function redis.undefine_command(name)
 undefine_command_impl(redis.commands, name)
 end
 redis.commands = {
--- commands operating on the key space
 exists   = command('EXISTS', {
 response = toboolean
 }),
@@ -721,28 +711,27 @@ response = toboolean
 expire   = command('EXPIRE', {
 response = toboolean
 }),
-pexpire  = command('PEXPIRE', { -- >= 2.6
+pexpire  = command('PEXPIRE', { 
 response = toboolean
 }),
 expireat = command('EXPIREAT', {
 response = toboolean
 }),
-pexpireat= command('PEXPIREAT', {   -- >= 2.6
+pexpireat= command('PEXPIREAT', {   
 response = toboolean
 }),
 ttl  = command('TTL'),
-pttl = command('PTTL'), -- >= 2.6
+pttl = command('PTTL'), 
 move = command('MOVE', {
 response = toboolean
 }),
 dbsize   = command('DBSIZE'),
-persist  = command('PERSIST', { -- >= 2.2
+persist  = command('PERSIST', { 
 response = toboolean
 }),
 keys = command('KEYS', {
 response = function(response)
 if type(response) == 'string' then
--- backwards compatibility path for Redis < 2.0
 local keys = {}
 response:gsub('[^%s]+', function(key)
 table.insert(keys, key)
@@ -768,8 +757,8 @@ set  = command('SET'),
 setnx= command('SETNX', {
 response = toboolean
 }),
-setex= command('SETEX'),-- >= 2.0
-psetex   = command('PSETEX'),   -- >= 2.6
+setex= command('SETEX'),
+psetex   = command('PSETEX'),   
 mset = command('MSET', {
 request = mset_filter_args
 }),
@@ -782,20 +771,20 @@ mget = command('MGET'),
 getset   = command('GETSET'),
 incr = command('INCR'),
 incrby   = command('INCRBY'),
-incrbyfloat  = command('INCRBYFLOAT', { -- >= 2.6
+incrbyfloat  = command('INCRBYFLOAT', { 
 response = function(reply, command, ...)
 return tonumber(reply)
 end,
 }),
 decr = command('DECR'),
 decrby   = command('DECRBY'),
-append   = command('APPEND'),   -- >= 2.0
-substr   = command('SUBSTR'),   -- >= 2.0
-strlen   = command('STRLEN'),   -- >= 2.2
-setrange = command('SETRANGE'), -- >= 2.2
-getrange = command('GETRANGE'), -- >= 2.2
-setbit   = command('SETBIT'),   -- >= 2.2
-getbit   = command('GETBIT'),   -- >= 2.2
+append   = command('APPEND'),   
+substr   = command('SUBSTR'),   
+strlen   = command('STRLEN'),   
+setrange = command('SETRANGE'), 
+getrange = command('GETRANGE'), 
+setbit   = command('SETBIT'),   
+getbit   = command('GETBIT'),   
 rpush= command('RPUSH'),
 lpush= command('LPUSH'),
 llen = command('LLEN'),
@@ -807,12 +796,12 @@ lrem = command('LREM'),
 lpop = command('LPOP'),
 rpop = command('RPOP'),
 rpoplpush= command('RPOPLPUSH'),
-blpop= command('BLPOP'),-- >= 2.0
-brpop= command('BRPOP'),-- >= 2.0
-rpushx   = command('RPUSHX'),   -- >= 2.2
-lpushx   = command('LPUSHX'),   -- >= 2.2
-linsert  = command('LINSERT'),  -- >= 2.2
-brpoplpush   = command('BRPOPLPUSH'),   -- >= 2.2
+blpop= command('BLPOP'),
+brpop= command('BRPOP'),
+rpushx   = command('RPUSHX'),   
+lpushx   = command('LPUSHX'),   
+linsert  = command('LINSERT'),  
+brpoplpush   = command('BRPOPLPUSH'),   
 sadd = command('SADD'),
 srem = command('SREM'),
 spop = command('SPOP'),
@@ -846,55 +835,55 @@ zrangebyscore= command('ZRANGEBYSCORE', {
 request  = zset_range_byscore_request,
 response = zset_range_reply,
 }),
-zrevrangebyscore = command('ZREVRANGEBYSCORE', {-- >= 2.2
+zrevrangebyscore = command('ZREVRANGEBYSCORE', {
 request  = zset_range_byscore_request,
 response = zset_range_reply,
 }),
-zunionstore  = command('ZUNIONSTORE', { -- >= 2.0
+zunionstore  = command('ZUNIONSTORE', { 
 request = zset_store_request
 }),
-zinterstore  = command('ZINTERSTORE', { -- >= 2.0
+zinterstore  = command('ZINTERSTORE', { 
 request = zset_store_request
 }),
 zcount   = command('ZCOUNT'),
 zcard= command('ZCARD'),
 zscore   = command('ZSCORE'),
 zremrangebyscore = command('ZREMRANGEBYSCORE'),
-zrank= command('ZRANK'),-- >= 2.0
-zrevrank = command('ZREVRANK'), -- >= 2.0
-zremrangebyrank  = command('ZREMRANGEBYRANK'),  -- >= 2.0
-hset = command('HSET', {-- >= 2.0
+zrank= command('ZRANK'),
+zrevrank = command('ZREVRANK'), 
+zremrangebyrank  = command('ZREMRANGEBYRANK'),  
+hset = command('HSET', {
 response = toboolean
 }),
-hsetnx   = command('HSETNX', {  -- >= 2.0
+hsetnx   = command('HSETNX', {  
 response = toboolean
 }),
-hmset= command('HMSET', {   -- >= 2.0
+hmset= command('HMSET', {   
 request  = hash_multi_request_builder(function(args, k, v)
 table.insert(args, k)
 table.insert(args, v)
 end),
 }),
-hincrby  = command('HINCRBY'),  -- >= 2.0
-hincrbyfloat = command('HINCRBYFLOAT', {-- >= 2.6
+hincrby  = command('HINCRBY'),  
+hincrbyfloat = command('HINCRBYFLOAT', {
 response = function(reply, command, ...)
 return tonumber(reply)
 end,
 }),
-hget = command('HGET'), -- >= 2.0
-hmget= command('HMGET', {   -- >= 2.0
+hget = command('HGET'), 
+hmget= command('HMGET', {   
 request  = hash_multi_request_builder(function(args, k, v)
 table.insert(args, v)
 end),
 }),
-hdel = command('HDEL'),-- >= 2.0
-hexists  = command('HEXISTS', { -- >= 2.0
+hdel = command('HDEL'),
+hexists  = command('HEXISTS', { 
 response = toboolean
 }),
-hlen = command('HLEN'), -- >= 2.0
-hkeys= command('HKEYS'),-- >= 2.0
-hvals= command('HVALS'),-- >= 2.0
-hgetall  = command('HGETALL', { -- >= 2.0
+hlen = command('HLEN'), 
+hkeys= command('HKEYS'),
+hvals= command('HVALS'),
+hgetall  = command('HGETALL', { 
 response = function(reply, command, ...)
 local new_reply = { }
 for i = 1, #reply, 2 do new_reply[reply[i]] = reply[i + 1] end
@@ -907,21 +896,21 @@ response = function(response) return response == 'PONG' end
 echo = command('ECHO'),
 auth = command('AUTH'),
 select   = command('SELECT'),
-multi= command('MULTI'),-- >= 2.0
-exec = command('EXEC'), -- >= 2.0
-discard  = command('DISCARD'),  -- >= 2.0
-watch= command('WATCH'),-- >= 2.2
-unwatch  = command('UNWATCH'),  -- >= 2.2
-subscribe= command('SUBSCRIBE'),-- >= 2.0
-unsubscribe  = command('UNSUBSCRIBE'),  -- >= 2.0
-psubscribe   = command('PSUBSCRIBE'),   -- >= 2.0
-punsubscribe = command('PUNSUBSCRIBE'), -- >= 2.0
-publish  = command('PUBLISH'),  -- >= 2.0
-eval = command('EVAL'), -- >= 2.6
-evalsha  = command('EVALSHA'),  -- >= 2.6
-script   = command('SCRIPT'),   -- >= 2.6
+multi= command('MULTI'),
+exec = command('EXEC'), 
+discard  = command('DISCARD'),  
+watch= command('WATCH'),
+unwatch  = command('UNWATCH'),  
+subscribe= command('SUBSCRIBE'),
+unsubscribe  = command('UNSUBSCRIBE'),  
+psubscribe   = command('PSUBSCRIBE'),   
+punsubscribe = command('PUNSUBSCRIBE'), 
+publish  = command('PUBLISH'),
+eval = command('EVAL'),
+evalsha  = command('EVALSHA'), 
+script   = command('SCRIPT'), 
 bgrewriteaof = command('BGREWRITEAOF'),
-config   = command('CONFIG', { -- >= 2.0
+config   = command('CONFIG', {
 response = function(reply, command, ...)
 if (type(reply) == 'table') then
 local new_reply = { }
@@ -931,7 +920,7 @@ end
 return reply
 end
 }),
-client   = command('CLIENT'),   -- >= 2.4
+client   = command('CLIENT'),   
 slaveof  = command('SLAVEOF'),
 save = command('SAVE'),
 bgsave   = command('BGSAVE'),
@@ -939,8 +928,8 @@ lastsave = command('LASTSAVE'),
 flushdb  = command('FLUSHDB'),
 flushall = command('FLUSHALL'),
 monitor  = command('MONITOR'),
-time = command('TIME'), -- >= 2.6
-slowlog  = command('SLOWLOG', { -- >= 2.2.13
+time = command('TIME'),
+slowlog  = command('SLOWLOG', {
 response = function(reply, command, ...)
 if (type(reply) == 'table') then
 local structured = { }
