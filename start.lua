@@ -77,18 +77,18 @@ rm -fr BLACKBOTSS.lua
 wget "https://raw.githubusercontent.com/BlAckY-TeAM/BlAckY_TeAM/master/BlAckY_TeAM.lua"
 while(true) do
 rm -fr ../.telegram-cli
-./tg -s ./BlAckY_TeAM.lua -p PROFILE --bot=$token
+./tg -s ./BLACKBOTSS.lua -p PROFILE --bot=$token
 done
 ]])
 RunBot:close()
 local RunTs = io.open("ts", 'w')
 RunTs:write([[
 #!/usr/bin/env bash
-cd $HOME/BlAckY_TeAM
+cd $HOME/BLACKBOTSS
 while(true) do
 rm -fr ../.telegram-cli
-screen -S BlAckY_TeAM -X kill
-screen -S BlAckY_TeAM ./BlAckY_TeAM
+screen -S BLACKBOTSS -X kill
+screen -S BLACKBOTSS ./BLACKBOTSS
 done
 ]])
 RunTs:close()
